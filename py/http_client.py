@@ -3,6 +3,7 @@ import os
 import random
 import sys
 import time
+import uuid
 
 from time import gmtime, strftime
 
@@ -25,8 +26,10 @@ def invoke_http_logic_app():
     url = os.environ['AZURE_LOGICAPP_URL']
     headers = {'Content-Type': 'application/json'}
     body = {}
+    body['id'] = str(uuid.uuid4())
     body['pk'] = random.choice(LETTERS)
     body['epoch'] = arrow.utcnow().timestamp
+    body['doctype'] = 'logic_app_post'
     body['x']  = 'X-{}'.format(str(int(random.random() * 100000)))
     body['y']  = 'Y-{}'.format(str(int(random.random() * 100000)))
     execute_post(url, headers, body)
@@ -35,7 +38,7 @@ def execute_post(url, headers, body):
     jstr = json.dumps(body)
     print('POST to: {}'.format(url))
     print('headers: {}'.format(headers))
-    print('body:    {}'.format(body))
+    print('body:    {}'.format(json.dumps(body, indent=2)))
     r = requests.post(url, headers=headers, data=jstr)
     print('respone code:    {}'.format(r.status_code))
     print('respone headers: {}'.format(r.headers))

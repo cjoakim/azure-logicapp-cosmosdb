@@ -1,0 +1,52 @@
+{
+    "definition": {
+        "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+        "actions": {
+            "Create_or_update_document": {
+                "inputs": {
+                    "body": "@triggerBody()",
+                    "headers": {
+                        "x-ms-documentdb-raw-partitionkey": "\"@{triggerBody()['pk']}\""
+                    },
+                    "host": {
+                        "connection": {
+                            "name": "@parameters('$connections')['documentdb']['connectionId']"
+                        }
+                    },
+                    "method": "post",
+                    "path": "/dbs/@{encodeURIComponent('dev')}/colls/@{encodeURIComponent('logic_app')}/docs"
+                },
+                "runAfter": {},
+                "type": "ApiConnection"
+            }
+        },
+        "contentVersion": "1.0.0.0",
+        "outputs": {},
+        "parameters": {
+            "$connections": {
+                "defaultValue": {},
+                "type": "Object"
+            }
+        },
+        "triggers": {
+            "manual": {
+                "inputs": {
+                    "schema": {}
+                },
+                "kind": "Http",
+                "type": "Request"
+            }
+        }
+    },
+    "parameters": {
+        "$connections": {
+            "value": {
+                "documentdb": {
+                    "connectionId": "/subscriptions/your-subscription/resourceGroups/cjoakimlogic/providers/Microsoft.Web/connections/documentdb",
+                    "connectionName": "documentdb",
+                    "id": "/subscriptions/your-subscription/providers/Microsoft.Web/locations/eastus/managedApis/documentdb"
+                }
+            }
+        }
+    }
+}

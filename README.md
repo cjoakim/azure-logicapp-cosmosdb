@@ -1,6 +1,6 @@
 # azure-logicapp-cosmosdb
 
-Simple HTTP-triggered Azure Logic App that writes to CosmosDB
+Simple HTTP-triggered Azure Logic App that writes to CosmosDB.
 
 ---
 
@@ -11,22 +11,22 @@ like the following to the Azure Logic App.
 
 ```
 {
-  "id": "48431681-2512-4666-a3b7-c70b54b502a9",
-  "pk": "G",
-  "epoch": 1593446959,
+  "id": "580c69d5-3462-470e-b823-7c5c40667b67",
+  "pk": "C",
+  "epoch": 1593448449,
   "doctype": "logic_app_post",
-  "x": "X-3452",
-  "y": "Y-28176"
+  "x": "X-95426",
+  "y": "Y-57173"
 }
 ```
 
 Note that an **id** uuid value is generated, as well as the **pk** - the CosmosDB
-partition key attribute name for the target container.
+**partition key attribute name** for the target container.
 
 ### HTTP Client Setup and Execution
 
 ```
-$ git clone https://github.com/cjoakim/azure-logicapp-cosmosdb.git
+$ git clone https://github.com/cjoakim/azure-logicapp-cosmosdb.git   # <-- this repo
 $ cd azure-logicapp-cosmosdb
 $ cd py
 $ ./venv.sh create                                # <-- create the python virtual environment with PyPI libs
@@ -36,9 +36,22 @@ $ python http_client.py invoke_http_logic_app     # <-- execute the program, pos
 
 ---
 
-## CosmosDB Configuration 
+## Azure Logic App
 
-### Initial Error
+The Logic App has just these two steps, and is triggered by a HTTP POST.
+
+<p align="center">
+  <img src="img/logic-app-designer.png">
+</p>
+
+### CosmosDB Configuration 
+
+Target database named **dev** with a **logic_app** container, which has the partition key
+attribute named **pk**.
+
+### Initial Logic App Error relating to Partition Key
+
+You may see the following error as you develop and execute your Logic App.
 
 ```
 {
@@ -75,3 +88,43 @@ $ python http_client.py invoke_http_logic_app     # <-- execute the program, pos
     }
 }
 ```
+
+### Fix the Partition Key Issue in the Logic App
+
+<p align="center">
+  <img src="img/create-or-update-document.png">
+</p>
+
+Add a **CosmosDB Create or Update Document** step.  Be sure to check the **Partition key value**
+setting as shown above.  The partition key value must be quoted, and this may be done
+in the **Code View** as follows:
+
+```
+...
+    "Create_or_update_document": {
+        "inputs": {
+            "body": "@triggerBody()",
+            "headers": {
+                "x-ms-documentdb-raw-partitionkey": "\"@{triggerBody()['pk']}\""
+            },
+...
+```
+
+See file [logicapp/code.json](logicapp/code.json) in this repository for the complete Logic App code.
+
+---
+
+### Successful Results 
+
+You should see similar output in your Logic App Overview Runs History
+in the Azure Portal UI.
+
+<p align="center">
+  <img src="img/logic-app-run.png">
+</p>
+
+Likewise, the document should have been persisted to CosmosDB like this:
+
+<p align="center">
+  <img src="img/cosmosdb-data-explorer.png">
+</p>

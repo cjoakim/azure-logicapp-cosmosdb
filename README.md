@@ -96,17 +96,17 @@ You may see the following error as you develop and execute your Logic App.
 </p>
 
 Add a **CosmosDB Create or Update Document** step.  Be sure to check the **Partition key value**
-setting as shown above.  The partition key value must be quoted, and this may be done
+setting as shown above.  The partition key value must be **quoted**, and this may be done
 in the **Code View** as follows:
 
 ```
 ...
-    "Create_or_update_document": {
-        "inputs": {
-            "body": "@triggerBody()",
-            "headers": {
-                "x-ms-documentdb-raw-partitionkey": "\"@{triggerBody()['pk']}\""
-            },
+"Create_or_update_document": {
+    "inputs": {
+        "body": "@triggerBody()",
+        "headers": {
+            "x-ms-documentdb-raw-partitionkey": "\"@{triggerBody()['pk']}\""   <--- quote the pk value
+        },
 ...
 ```
 

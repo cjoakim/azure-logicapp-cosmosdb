@@ -1,6 +1,7 @@
 # Python Virtual Environment Requirements file
-# Chris Joakim, Microsoft, 2020/06/29
+# Chris Joakim, Microsoft, 2020/07/02
 
 arrow
 docopt
+Faker
 requests

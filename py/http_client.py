@@ -31,11 +31,14 @@ def invoke_http_logic_app():
     # A generated document looks like this:
     # {'pk': 'E', 'epoch': 1593443622, 'x': 'X-70948', 'y': 'Y-6834'}
 
+    states = load_us_states()
+    state_abbreviations = sorted(states.keys())
+
     url = os.environ['AZURE_LOGICAPP_URL']
     headers = {'Content-Type': 'application/json'}
     body = {}
     body['id'] = str(uuid.uuid4())
-    body['pk'] = random.choice(STATES)
+    body['pk'] = random.choice(state_abbreviations)
     body['epoch'] = arrow.utcnow().timestamp
     body['doctype'] = 'logic_app_post'
 
@@ -61,6 +64,15 @@ def execute_post(url, headers, body):
     print('respone headers: {}'.format(r.headers))
     print('respone text:    {}'.format(r.text))
 
+def load_us_states():
+    states = dict()
+    with open('data/us_states.csv', 'rt') as f:
+        for line in f:
+            tokens = line.split(',')
+            name, abbrv = tokens[0].strip(), tokens[1].strip()
+            states[abbrv] = name
+    return states
+
 def explore_faker():
     states = dict()
     for n in range(100000):
@@ -76,60 +88,11 @@ if __name__ == "__main__":
             invoke_http_logic_app()
         elif func == 'explore_faker':
             explore_faker()
+        elif func == 'load_us_states':
+            d = load_us_states()
+            print(d)
+            print(sorted(d.keys()))
         else:
             print('undefined func: {}'.format(func))
     else:
         print('specify a command line function')
-
-# {
-#   "Alabama": 99995,
-#   "Alaska": 99972,
-#   "Arizona": 99958,
-#   "Arkansas": 99980,
-#   "California": 99870,
-#   "Colorado": 99911,
-#   "Connecticut": 99982,
-#   "Delaware": 99928,
-#   "Florida": 99974,
-#   "Georgia": 99992,
-#   "Hawaii": 99968,
-#   "Idaho": 99985,
-#   "Illinois": 99815,
-#   "Indiana": 99937,
-#   "Iowa": 99903,
-#   "Kansas": 99946,
-#   "Kentucky": 99977,
-#   "Louisiana": 99999,
-#   "Maine": 99952,
-#   "Maryland": 99808,
-#   "Massachusetts": 99971,
-#   "Michigan": 99993,
-#   "Minnesota": 99997,
-#   "Mississippi": 99986,
-#   "Missouri": 99930,
-#   "Montana": 99936,
-#   "Nebraska": 99924,
-#   "Nevada": 99991,
-#   "New Hampshire": 99940,
-#   "New Jersey": 99963,
-#   "New Mexico": 99970,
-#   "New York": 99758,
-#   "North Carolina": 99955,
-#   "North Dakota": 99902,
-#   "Ohio": 99967,
-#   "Oklahoma": 99951,
-#   "Oregon": 99900,
-#   "Pennsylvania": 99914,
-#   "Rhode Island": 99954,
-#   "South Carolina": 99907,
-#   "South Dakota": 99989,
-#   "Tennessee": 99984,
-#   "Texas": 99996,
-#   "Utah": 99981,
-#   "Vermont": 99890,
-#   "Virginia": 99998,
-#   "Washington": 99880,
-#   "West Virginia": 99931,
-#   "Wisconsin": 99987,
-#   "Wyoming": 99990
-# }

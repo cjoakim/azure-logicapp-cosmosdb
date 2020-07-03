@@ -4,6 +4,7 @@ py/bin/
 py/include/
 py/man/
 
+py/Scripts/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

@@ -2,7 +2,80 @@
     "definition": {
         "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
         "actions": {
-            "Create_or_update_document": {
+            "Condition": {
+                "actions": {
+                    "Insert_Anomaly_Events": {
+                        "inputs": {
+                            "body": "@triggerBody()",
+                            "headers": {
+                                "x-ms-documentdb-raw-partitionkey": "\"@{triggerBody()['pk']}\""
+                            },
+                            "host": {
+                                "connection": {
+                                    "name": "@parameters('$connections')['documentdb']['connectionId']"
+                                }
+                            },
+                            "method": "post",
+                            "path": "/dbs/@{encodeURIComponent('dev')}/colls/@{encodeURIComponent('security_system_anomalies')}/docs"
+                        },
+                        "runAfter": {},
+                        "type": "ApiConnection"
+                    }
+                },
+                "expression": {
+                    "or": [
+                        {
+                            "greaterOrEquals": [
+                                "@variables('temperature')",
+                                200
+                            ]
+                        },
+                        {
+                            "greaterOrEquals": [
+                                "@variables('cv_threat')",
+                                50
+                            ]
+                        }
+                    ]
+                },
+                "runAfter": {
+                    "Initialize_variable_-_cv_threat": [
+                        "Succeeded"
+                    ]
+                },
+                "type": "If"
+            },
+            "Initialize_variable_-_cv_threat": {
+                "inputs": {
+                    "variables": [
+                        {
+                            "name": "cv_threat",
+                            "type": "integer",
+                            "value": "@triggerBody()['cv_threat']"
+                        }
+                    ]
+                },
+                "runAfter": {
+                    "Initialize_variable_-_temperature": [
+                        "Succeeded"
+                    ]
+                },
+                "type": "InitializeVariable"
+            },
+            "Initialize_variable_-_temperature": {
+                "inputs": {
+                    "variables": [
+                        {
+                            "name": "temperature",
+                            "type": "integer",
+                            "value": "@triggerBody()['temperature']"
+                        }
+                    ]
+                },
+                "runAfter": {},
+                "type": "InitializeVariable"
+            },
+            "Insert_All_Events": {
                 "inputs": {
                     "body": "@triggerBody()",
                     "headers": {
@@ -14,9 +87,13 @@
                         }
                     },
                     "method": "post",
-                    "path": "/dbs/@{encodeURIComponent('dev')}/colls/@{encodeURIComponent('logic_app')}/docs"
+                    "path": "/dbs/@{encodeURIComponent('dev')}/colls/@{encodeURIComponent('security_system_all')}/docs"
                 },
-                "runAfter": {},
+                "runAfter": {
+                    "Condition": [
+                        "Succeeded"
+                    ]
+                },
                 "type": "ApiConnection"
             }
         },
@@ -42,9 +119,9 @@
         "$connections": {
             "value": {
                 "documentdb": {
-                    "connectionId": "/subscriptions/your-subscription/resourceGroups/cjoakimlogic/providers/Microsoft.Web/connections/documentdb",
+                    "connectionId": "/subscriptions/<your-subscription-id>/resourceGroups/cjoakimlogic/providers/Microsoft.Web/connections/documentdb",
                     "connectionName": "documentdb",
-                    "id": "/subscriptions/your-subscription/providers/Microsoft.Web/locations/eastus/managedApis/documentdb"
+                    "id": "/subscriptions/<your-subscription-id>/providers/Microsoft.Web/locations/eastus/managedApis/documentdb"
                 }
             }
         }

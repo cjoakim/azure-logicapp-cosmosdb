@@ -2,129 +2,121 @@
 
 Simple HTTP-triggered Azure Logic App that writes to CosmosDB.
 
----
-
-## HTTP Client 
-
-Implemented in Python, creates and HTTP POSTs a randomized JSON document 
-like the following to the Azure Logic App.
-
-```
-{
-  "id": "580c69d5-3462-470e-b823-7c5c40667b67",
-  "pk": "C",
-  "epoch": 1593448449,
-  "doctype": "logic_app_post",
-  "x": "X-95426",
-  "y": "Y-57173"
-}
-```
-
-Note that an **id** uuid value is generated, as well as the **pk** - the CosmosDB
-**partition key attribute name** for the target container.
-
-### HTTP Client Setup and Execution
-
-```
-$ git clone https://github.com/cjoakim/azure-logicapp-cosmosdb.git   # <-- this repo
-$ cd azure-logicapp-cosmosdb
-$ cd py
-$ ./venv.sh create                                # <-- create the python virtual environment with PyPI libs
-$ source bin/activate                             # <-- activate the python virtual environment
-$ python http_client.py invoke_http_logic_app     # <-- execute the program, post a doc to the Logic App
-```
+Example app is a simulated Home Security System.
 
 ---
 
-## Azure Logic App
+## What are Azure Logic Apps?
 
-The Logic App has just these two steps, and is triggered by a HTTP POST.
+TODO
+
+---
+
+## This Example App - a  Home Security System
+
+- **Home security device captures sensor data** periodically, including **temperature** and **cv_threat**
+- Home security device **HTTP POSTs heartbeat JSON messages**, with this data, to the Azure Logic App
+  - A Python client in this repo creates and POSTs randomized messages
+- Logic in the **Azure Logic App determines if the heartbeat is an anomaly**
+- Logic App saves all messages to the **CosmosDB 'security_system_all' container**
+- Logic App saves the anomalies to the **CosmosDB 'security_system_anomalies' container**
+
+- The Logic App can be extended to send emails, put messages on a queue, etc
+- The Logic App can be extended to invoke Cognitive Services or other web services, etc 
+
+---
+
+## The Azure Logic App
+
+### Designer View
 
 <p align="center">
   <img src="img/logic-app-designer.png">
 </p>
 
-### CosmosDB Configuration 
-
-Target database named **dev** with a **logic_app** container, which has the partition key
-attribute named **pk**.
-
-### Initial Logic App Error relating to Partition Key
-
-You may see the following error as you develop and execute your Logic App.
-
-```
-{
-    "statusCode": 400,
-    "headers": {
-        "x-ms-last-state-change-utc": "Fri,26 Jun 2020 19:59:50.185 GMT",
-        "lsn": "1",
-        "x-ms-schemaversion": "1.9",
-        "x-ms-quorum-acked-lsn": "1",
-        "x-ms-substatus": "1001",
-        "x-ms-current-write-quorum": "3",
-        "x-ms-current-replica-set-size": "4",
-        "x-ms-xp-role": "1",
-        "x-ms-global-Committed-lsn": "1",
-        "x-ms-number-of-read-regions": "0",
-        "x-ms-transport-request-id": "1",
-        "x-ms-cosmos-llsn": "1",
-        "x-ms-cosmos-quorum-acked-llsn": "1",
-        "x-ms-session-token": "0:1",
-        "x-ms-request-charge": "0",
-        "x-ms-serviceversion": "version=2.11.0.0",
-        "x-ms-activity-id": "496a279d-ba5d-48ff-a7fc-85187cc10602",
-        "Strict-Transport-Security": "max-age=31536000",
-        "x-ms-gatewayversion": "version=2.11.0",
-        "Timing-Allow-Origin": "*",
-        "x-ms-apihub-cached-response": "true",
-        "Date": "Mon, 29 Jun 2020 15:30:32 GMT",
-        "Content-Length": "1170",
-        "Content-Type": "application/json"
-    },
-    "body": {
-        "code": "BadRequest",
-        "message": "Message: {\"Errors\":[\"The partition key supplied in x-ms-partitionkey header has fewer components than defined in the the collection.\"...
-    }
-}
-```
-
-### Fix the Partition Key Issue in the Logic App
+### Code View
 
 <p align="center">
-  <img src="img/create-or-update-document.png">
+  <img src="img/logic-app-code-view.png">
 </p>
-
-Add a **CosmosDB Create or Update Document** step.  Be sure to check the **Partition key value**
-setting as shown above.  The partition key value must be **quoted**, and this may be done
-in the **Code View** as follows:
-
-```
-...
-"Create_or_update_document": {
-    "inputs": {
-        "body": "@triggerBody()",
-        "headers": {
-            "x-ms-documentdb-raw-partitionkey": "\"@{triggerBody()['pk']}\""   <--- quote the pk value
-        },
-...
-```
-
-See file [logicapp/code.json](logicapp/code.json) in this repository for the complete Logic App code.
 
 ---
 
-### Successful Results 
+## Python HTTP Client - Simulated Home Security System
 
-You should see similar output in your Logic App Overview Runs History
-in the Azure Portal UI.
+Implemented in Python 3, creates and HTTP POSTs a JSON document with randomized data.
+
+This code uses **environment variable AZURE_LOGICAPP_URL** - the URL of the Azure Logic App.
+
+```
+$ env | grep AZURE_LOGICAPP_URL
+AZURE_LOGICAPP_URL=https://prod-47.eastus.logic.azure.com:443/workflows/64a0f2...........
+```
+
+### Setup your Python Virtual environment
+
+#### Setup On Linux or macOS
+
+In a Terminal window, run the following commands:
+
+```
+$ git clone https://github.com/cjoakim/azure-logicapp-cosmosdb.git   <-- clone this GitHub repository
+$ cd azure-logicapp-cosmosdb
+$ cd py                        <-- the python client program is in this directory
+$ venv.sh create               <-- create a python virtual environment, libraries specified in requirements.in
+$ source bin/activate          <-- activate the python virtual environment
+```
+
+#### Setup On Windows
+
+In a PowerShell window, run the following commands:
+
+```
+$ git clone https://github.com/cjoakim/azure-logicapp-cosmosdb.git
+$ cd azure-logicapp-cosmosdb
+$ cd py
+
+TODO 
+```
+
+### Execute the Client Program (any OS)
+
+```
+$ python security_system.py
+...
+body:    {
+  "id": "214493f7-efa4-4701-bba9-a8c9bc9ee117",
+  "pk": "1066613264658",
+  "device_id": "1066613264658",
+  "epoch": 1593781277,
+  "temperature": 78,
+  "cv_threat": 98,                             <-- ALERT!
+  "name": "Danny Elliott",
+  "address": "80817 Kelley Trail Mall",
+  "city": "North Michael",
+  "state": "NE",
+  "doctype": "home_security_system_heartbeat",
+  "info": "6.57.23"
+}
+...
+```
+
+The **cv_threat** value can be in the range from 0-99; 98 indicates than an intruder is in the house!
+This message is definitely an anomaly, even though the **temperature** is in the normal range.
+
+HTTP POSTing this JSON to the Azure Logic App will cause it to be triggered and execute.
+When execution is completed, you'll see an entry in the following **Run History List**.
+
+### Run History List
 
 <p align="center">
-  <img src="img/logic-app-run.png">
+  <img src="img/logic-app-run-history-list.png">
 </p>
 
-Likewise, the document should have been persisted to CosmosDB like this:
+You can click into an individual **Run History View**, and into its Steps to see the details for each step.
+
+### Run History View
 
 <p align="center">
-  <img src="img/cosmosdb-data-explorer.png">
+  <img src="img/logic-app-run-anomaly.png">
 </p>

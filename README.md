@@ -1,28 +1,37 @@
 # azure-logicapp-cosmosdb
 
-Simple HTTP-triggered Azure Logic App that writes to CosmosDB.
+A simple HTTP-triggered Azure Logic App that writes to CosmosDB.
 
-Example app is a simulated Home Security System.
+This example app is a simulated Home Security System.
 
 ---
 
 ## What are Azure Logic Apps?
 
-TODO
+- [Overview](https://docs.microsoft.com/en-us/azure/logic-apps/logic-apps-overview)
+- [Triggers](https://docs.microsoft.com/en-us/azure/logic-apps/logic-apps-workflow-actions-triggers#trigger-types-list) - HTTP, Schedule
+- [Why?](https://docs.microsoft.com/en-us/azure/logic-apps/logic-apps-overview#why-use-logic-apps)
+  - **Low-Code, No-Code** - can be developed by **Citizen Developers**
+  - Serverless, reliable managed PaaS service, no 24x7x365 VMs to maintain
+  - [Pricing](https://azure.microsoft.com/en-us/pricing/details/logic-apps/)
+- [Connectors](https://docs.microsoft.com/en-us/azure/connectors/apis-list)
+- [Documentation](https://docs.microsoft.com/en-us/azure/logic-apps/)
 
 ---
 
 ## This Example App - a  Home Security System
 
-- **Home security device captures sensor data** periodically, including **temperature** and **cv_threat**
+- **Home security device captures sensor data** periodically, including **temperature** and **cv_threat** (computer vision)
 - Home security device **HTTP POSTs heartbeat JSON messages**, with this data, to the Azure Logic App
   - A Python client in this repo creates and POSTs randomized messages
 - Logic in the **Azure Logic App determines if the heartbeat is an anomaly**
 - Logic App saves all messages to the **CosmosDB 'security_system_all' container**
 - Logic App saves the anomalies to the **CosmosDB 'security_system_anomalies' container**
 
-- The Logic App can be extended to send emails, put messages on a queue, etc
-- The Logic App can be extended to invoke Cognitive Services or other web services, etc 
+### Enhancements
+
+- Send emails, put messages on a queue, etc. with [Logic App Connectors](https://docs.microsoft.com/en-us/azure/connectors/apis-list)
+- Integrate with web services like [Azure Cognitive Services](https://docs.microsoft.com/en-us/azure/cognitive-services/) - Vision, Face, Text Analytics, etc
 
 ---
 
@@ -75,11 +84,13 @@ In a PowerShell window, run the following commands:
 $ git clone https://github.com/cjoakim/azure-logicapp-cosmosdb.git
 $ cd azure-logicapp-cosmosdb
 $ cd py
-
-TODO 
+$ .\venv.ps1                   <-- create and activate the python virtual environment
 ```
 
 ### Execute the Client Program (any OS)
+
+This program simulates an on-prem device in the home of the customer subscribing
+to the home security service.
 
 ```
 $ python security_system.py
@@ -90,7 +101,7 @@ body:    {
   "device_id": "1066613264658",
   "epoch": 1593781277,
   "temperature": 78,
-  "cv_threat": 98,                             <-- ALERT!
+  "cv_threat": 98,                             <-- Computer-Vision ALERT!
   "name": "Danny Elliott",
   "address": "80817 Kelley Trail Mall",
   "city": "North Michael",

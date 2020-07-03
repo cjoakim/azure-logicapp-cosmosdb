@@ -12,10 +12,18 @@ This example app is a simulated Home Security System.
 - [Triggers](https://docs.microsoft.com/en-us/azure/logic-apps/logic-apps-workflow-actions-triggers#trigger-types-list) - HTTP, Schedule
 - [Why?](https://docs.microsoft.com/en-us/azure/logic-apps/logic-apps-overview#why-use-logic-apps)
   - **Low-Code, No-Code** - can be developed by **Citizen Developers**
-  - Serverless, reliable managed PaaS service, no 24x7x365 VMs to maintain
+  - Serverless reliable managed PaaS service, no 24x7x365 VMs to maintain
+  - [Many Connectors!](https://docs.microsoft.com/en-us/connectors/)
   - [Pricing](https://azure.microsoft.com/en-us/pricing/details/logic-apps/)
-- [Connectors](https://docs.microsoft.com/en-us/azure/connectors/apis-list)
+  - [BizTalk Migration](https://docs.microsoft.com/en-us/azure/logic-apps/logic-apps-move-from-mabs)
 - [Documentation](https://docs.microsoft.com/en-us/azure/logic-apps/)
+- [Expressions Reference](https://docs.microsoft.com/en-us/azure/logic-apps/workflow-definition-language-functions-reference) 
+
+### Examples
+
+- [Scheduled Workflow with Bing Maps Integration](https://docs.microsoft.com/en-us/azure/logic-apps/tutorial-build-schedule-recurring-logic-app-workflow)
+- [Approval-Based Workflow](https://docs.microsoft.com/en-us/azure/logic-apps/tutorial-process-mailing-list-subscriptions-workflow)
+- [Process Incoming Emails](https://docs.microsoft.com/en-us/azure/logic-apps/tutorial-process-email-attachments-workflow)
 
 ---
 

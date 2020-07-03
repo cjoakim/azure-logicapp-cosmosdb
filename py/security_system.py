@@ -16,10 +16,11 @@ import arrow
 import requests
 
 # Python HTTP Client for the Azure Logic App.
+# Simulates a home security system.
 # Chris Joakim, Microsoft, 2020/07/03
 #
 # Usage:
-# $ python http_client.py invoke_http_logic_app 
+# $ python security_system.py
 
 US_STATES = 'AK,AL,AR,AZ,CA,CO,CT,DC,DE,FL,GA,HI,IA,ID,IL,IN,KS,KY,LA,MA,MD,ME,MI,MN,MO,MS,MT,NC,ND,NE,NH,NJ,NM,NV,NY,OH,OK,OR,PA,RI,SC,SD,TN,TX,UT,VA,VT,WA,WI,WV,WY'.split(',')
 
@@ -29,12 +30,11 @@ fake.add_provider(address)
 fake.add_provider(barcode)
 fake.add_provider(internet)
 
-def invoke_http_logic_app():
+def post_security_system_message():
     # Generate and HTTP Post a randomized JSON document to the Azure Logic App
     url = os.environ['AZURE_LOGICAPP_URL']
     headers = {'Content-Type': 'application/json'}
     body = generate_message_body()
-    print(json.dumps(body, indent=2))
     execute_post(url, headers, body)
 
 def generate_message_body():
@@ -52,12 +52,12 @@ def generate_message_body():
     body['temperature'] = normal_temp  # temperature sensor
     body['cv_threat'] = normal_cv      # computer-vision sensor
     body['name'] = fake.name()
-    body['city'] = fake.city()
     body['address'] = '{} {} {}'.format(
         fake.building_number(), fake.street_name(), fake.street_suffix())
+    body['city'] = fake.city()
     body['state'] = random.choice(US_STATES)
     body['doctype'] = 'home_security_system_heartbeat'
-    body['randoms'] = '{} {} {}'.format(r1, r2, r3)
+    body['info'] = '{}.{}.{}'.format(r1, r2, r3)
 
     # 10% of these generated messages will indicate an anomaly
     if r1 < 10:
@@ -119,7 +119,6 @@ def debug_messages():
             cv_msg = 'outside'
         if cv >= 90:
             cv_msg = 'intruder'
-
         print('{} {} | {} {} | {}'.format(t, t_msg, cv, cv_msg, body['randoms']))
 
 def ad_hoc():
@@ -145,6 +144,6 @@ if __name__ == "__main__":
             print(d)
             print(sorted(d.keys()))
         else:
-            invoke_http_logic_app()
+            print('specify a function on the command-line')
     else:
-        print('specify a command line function')
+        post_security_system_message()

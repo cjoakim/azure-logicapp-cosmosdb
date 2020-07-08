@@ -31,7 +31,7 @@ This example app is a **simulated Home Security System**.
 ## This Example App - a  Home Security System
 
 - **Home security device captures sensor data** periodically, including **temperature** and **cv_threat** (computer vision)
-- Home security device **HTTP POSTs heartbeat JSON messages**, with this data, to the Azure Logic App.  A Python client in this repo creates and POSTs randomized messages.
+- Home security device **HTTP POSTs heartbeat JSON messages**, with this data, to the Azure Logic App.  A Python program in this repo creates and POSTs these randomized messages.
 - Logic in the **Azure Logic App determines if the heartbeat is an anomaly**
 - Logic App saves all messages to the **CosmosDB 'security_system_all' container**
 - Logic App saves the anomalies to the **CosmosDB 'security_system_anomalies' container**
@@ -45,10 +45,16 @@ This example app is a **simulated Home Security System**.
 
 ## The Azure Logic App
 
-### Designer View
+### Designer View, Compact
 
 <p align="center">
   <img src="img/logic-app-designer.png">
+</p>
+
+### Designer View, Full
+
+<p align="center">
+  <img src="img/logic-app-designer-full.png">
 </p>
 
 ### Code View

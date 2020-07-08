@@ -16,11 +16,12 @@ import arrow
 import requests
 
 # Python HTTP Client for the Azure Logic App.
-# Simulates a home security system.
-# Chris Joakim, Microsoft, 2020/07/03
+# Simulates messages from a home security system.
+# Chris Joakim, Microsoft, 2020/07/08
 #
 # Usage:
 # $ python security_system.py
+# $ python security_system.py temp 514 cv 99
 
 US_STATES = 'AK,AL,AR,AZ,CA,CO,CT,DC,DE,FL,GA,HI,IA,ID,IL,IN,KS,KY,LA,MA,MD,ME,MI,MN,MO,MS,MT,NC,ND,NE,NH,NJ,NM,NV,NY,OH,OK,OR,PA,RI,SC,SD,TN,TX,UT,VA,VT,WA,WI,WV,WY'.split(',')
 
@@ -77,7 +78,17 @@ def generate_message_body():
             else:   
                 body['temperature'] = normal_temp
                 body['cv_threat'] = 30 + int(random.random() * 50)  # someone is outside
+
+    check_for_cli_arg_overrides(body)  # enables setting the temperature or cv_threat
     return body
+
+def check_for_cli_arg_overrides(body):
+    for idx, arg in enumerate(sys.argv):
+        print('arg: {} {}'.format(idx, arg))
+        if arg == 'temp':
+            body['temperature'] = int(sys.argv[idx + 1])
+        elif arg == 'cv':
+            body['cv_threat'] = int(sys.argv[idx + 1])
 
 def execute_post(url, headers, body):
     jstr = json.dumps(body)
@@ -86,8 +97,8 @@ def execute_post(url, headers, body):
     print('body:    {}'.format(json.dumps(body, indent=2)))
     r = requests.post(url, headers=headers, data=jstr)
     print('respone code:    {}'.format(r.status_code))
-    print('respone headers: {}'.format(r.headers))
-    print('respone text:    {}'.format(r.text))
+    #print('respone headers: {}'.format(r.headers))
+    #print('respone text:    {}'.format(r.text))
 
 def load_us_states():
     states = dict()
@@ -130,20 +141,19 @@ def ad_hoc():
 
 
 if __name__ == "__main__":
+    # if len(sys.argv) > 1:
+    #     func = sys.argv[1].lower()
+    #     if func == 'explore_faker':
+    #         explore_faker()
+    #     elif func == 'debug_messages':
+    #         debug_messages()
+    #     elif func == 'ad_hoc':
+    #         ad_hoc()
+    #     elif func == 'load_us_states':
+    #         d = load_us_states()
+    #         print(d)
+    #         print(sorted(d.keys()))
+    #     else:
+    #         print('specify a function on the command-line')
 
-    if len(sys.argv) > 1:
-        func = sys.argv[1].lower()
-        if func == 'explore_faker':
-            explore_faker()
-        elif func == 'debug_messages':
-            debug_messages()
-        elif func == 'ad_hoc':
-            ad_hoc()
-        elif func == 'load_us_states':
-            d = load_us_states()
-            print(d)
-            print(sorted(d.keys()))
-        else:
-            print('specify a function on the command-line')
-    else:
-        post_security_system_message()
+    post_security_system_message()

@@ -2,7 +2,7 @@
 
 A simple HTTP-triggered Azure Logic App that writes to CosmosDB.
 
-This example app is a simulated Home Security System.
+This example app is a **simulated Home Security System**.
 
 ---
 
@@ -11,8 +11,9 @@ This example app is a simulated Home Security System.
 - [Overview](https://docs.microsoft.com/en-us/azure/logic-apps/logic-apps-overview)
 - [Triggers](https://docs.microsoft.com/en-us/azure/logic-apps/logic-apps-workflow-actions-triggers#trigger-types-list) - HTTP, Schedule
 - [Why?](https://docs.microsoft.com/en-us/azure/logic-apps/logic-apps-overview#why-use-logic-apps)
-  - **Low-Code, No-Code** - can be developed by **Citizen Developers**
-  - Serverless reliable managed PaaS service, no 24x7x365 VMs to maintain
+  - **"Low-Code / No-Code"** - can be developed by **Citizen Developers**
+  - **Serverless** reliable managed PaaS service, no 24x7x365 VMs to maintain
+  - **Event Driven** - (aka - Realtime, Reactive, Streaming, etc.)
   - [Many Connectors!](https://docs.microsoft.com/en-us/connectors/)
   - [Pricing](https://azure.microsoft.com/en-us/pricing/details/logic-apps/)
   - [BizTalk Migration](https://docs.microsoft.com/en-us/azure/logic-apps/logic-apps-move-from-mabs)
@@ -30,8 +31,7 @@ This example app is a simulated Home Security System.
 ## This Example App - a  Home Security System
 
 - **Home security device captures sensor data** periodically, including **temperature** and **cv_threat** (computer vision)
-- Home security device **HTTP POSTs heartbeat JSON messages**, with this data, to the Azure Logic App
-  - A Python client in this repo creates and POSTs randomized messages
+- Home security device **HTTP POSTs heartbeat JSON messages**, with this data, to the Azure Logic App.  A Python client in this repo creates and POSTs randomized messages.
 - Logic in the **Azure Logic App determines if the heartbeat is an anomaly**
 - Logic App saves all messages to the **CosmosDB 'security_system_all' container**
 - Logic App saves the anomalies to the **CosmosDB 'security_system_anomalies' container**

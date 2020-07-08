@@ -13,7 +13,7 @@ Repos:
 ## What are Azure Logic Apps?
 
 - [Overview](https://docs.microsoft.com/en-us/azure/logic-apps/logic-apps-overview)
-- [Triggers](https://docs.microsoft.com/en-us/azure/logic-apps/logic-apps-workflow-actions-triggers#trigger-types-list) - HTTP, Schedule
+- [Triggers](https://docs.microsoft.com/en-us/azure/logic-apps/logic-apps-workflow-actions-triggers#trigger-types-list) - HTTP, Schedule, eMail, or other Connectors
 - [Why?](https://docs.microsoft.com/en-us/azure/logic-apps/logic-apps-overview#why-use-logic-apps)
   - **"Low-Code / No-Code"** - can be developed by **Citizen Developers**
   - **Serverless** reliable managed PaaS service, no 24x7x365 VMs to maintain

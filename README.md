@@ -17,7 +17,7 @@ Repos:
 - [Why?](https://docs.microsoft.com/en-us/azure/logic-apps/logic-apps-overview#why-use-logic-apps)
   - **"Low-Code / No-Code"** - can be developed by **Citizen Developers**
   - **Serverless** reliable managed PaaS service, no 24x7x365 VMs to maintain
-  - **Event Driven** - (aka - Realtime, Reactive, Streaming, etc.)
+  - **Event Driven** - (aka - Realtime, Reactive, Streaming)
   - [Many Connectors!](https://docs.microsoft.com/en-us/connectors/)
   - [Pricing](https://azure.microsoft.com/en-us/pricing/details/logic-apps/)
   - [BizTalk Migration](https://docs.microsoft.com/en-us/azure/logic-apps/logic-apps-move-from-mabs)

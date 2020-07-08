@@ -4,6 +4,10 @@ A simple HTTP-triggered Azure Logic App that writes to CosmosDB.
 
 This example app is a **simulated Home Security System**.
 
+Repos:
+- https://github.com/cjoakim/azure-logicapp-cosmosdb  (This Repo, Simple Logic App)
+- https://github.com/cjoakim/azure-logicapp-blob-aci-dotnet  (Logic App as "Orchestrator" for ACI)
+
 ---
 
 ## What are Azure Logic Apps?

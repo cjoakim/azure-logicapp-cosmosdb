@@ -63,6 +63,8 @@ This example app is a **simulated Home Security System**.
   <img src="img/logic-app-code-view.png">
 </p>
 
+[Code](logicapp/code.json)
+
 ---
 
 ## Python HTTP Client - Simulated Home Security System
@@ -131,6 +133,11 @@ This message is definitely an anomaly, even though the **temperature** is in the
 
 HTTP POSTing this JSON to the Azure Logic App will cause it to be triggered and execute.
 When execution is completed, you'll see an entry in the following **Run History List**.
+
+Alternatively, override the randomized temperature and cv_threat on the command-line like this:
+```
+python security_system.py temp 514 cv 99
+```
 
 ### Run History List
 

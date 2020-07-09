@@ -36,6 +36,16 @@ Repos:
 
 ---
 
+## What is CosmosDB?
+
+<p align="center">
+  <a href="https://github.com/cjoakim/azure-cosmosdb-nosql-hackathon/blob/master/pres/what-is-cosmosdb.md">
+    <img src="img/azure-cosmosdb.png">
+  </a>
+</p>
+
+---
+
 ## This Example App - a  Home Security System
 
 - **Home security device captures sensor data** periodically, including **temperature** and **cv_threat** (computer vision)
